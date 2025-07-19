@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌍 Flashcard Học Từ Vựng</title>
+    <title>🌍 Flashcard Học Từ Vựng Quốc Tế</title>
     <style>
         * {
             margin: 0;
@@ -455,6 +455,18 @@
             margin-bottom: 5px;
         }
 
+        .speak-btn {
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-left: 10px;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+
+        .speak-btn:hover {
+            transform: scale(1.2);
+        }
+
         .word-meaning {
             color: #a0c4cc;
             font-size: 0.95em;
@@ -802,7 +814,7 @@
                 // Show English word (front)
                 flashcardElement.innerHTML = `
                     <div class="card-content">
-                        <div class="word">${card.word}</div>
+                        <div class="word">${card.word} <span class="speak-btn" onclick="speakWord('${card.word}', event)">🔊</span></div>
                         <div class="card-info">
                             <span class="card-number">${currentIndex + 1}/${vocabulary.length}</span>
                             <span class="card-type">🌍 Từ vựng quốc tế</span>
@@ -1083,7 +1095,7 @@
                 return `
                     <div class="word-item">
                         <div class="word-info">
-                            <div class="word-text">${item.word}</div>
+                            <div class="word-text">${item.word} <span class="speak-btn" onclick="speakWord('${item.word}', event)">🔊</span></div>
                             <div class="word-meaning">${item.meaning}</div>
                         </div>
                         <button class="delete-btn" onclick="deleteWord(${index})">🗑️ Xóa</button>
@@ -1367,6 +1379,17 @@
         }, 30000);
 
         // 🔧 UTILITY FUNCTIONS
+        function speakWord(word, event) {
+            event.stopPropagation(); // Ngăn sự kiện click lan ra các phần tử cha (như lật thẻ)
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US'; // Đặt ngôn ngữ là tiếng Anh (Mỹ)
+                utterance.rate = 0.9; // Tốc độ đọc
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Rất tiếc, trình duyệt của bạn không hỗ trợ chức năng đọc văn bản.');
+            }
+        }
         function shuffleArray(array) {
             const shuffled = [...array];
             for (let i = shuffled.length - 1; i > 0; i--) {
