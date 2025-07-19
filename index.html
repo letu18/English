@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 International English Flashcards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 25%, #2c5364 50%, #1e3c72 75%, #2a5298 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Hiệu ứng nền */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(120, 219, 226, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(120, 219, 226, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 🎆 FIREWORKS ANIMATION - PHÁO HOA THẬT */
+        .fireworks-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .firework {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #fff;
+        }
+
+        .firework::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: 50%;
+            animation: firework-launch 1.2s ease-out forwards;
+        }
+
+        @keyframes firework-launch {
+            0% {
+                transform: translateY(100vh) scale(1);
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(var(--target-y)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .firework-burst {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: burst 1.8s ease-out forwards;
+        }
+
+        @keyframes burst {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            15% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0) translate(var(--dx), var(--dy));
+                opacity: 0;
+            }
+        }
+
+        .spark {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: spark 1s ease-out forwards;
+        }
+
+        @keyframes spark {
+            0% {
+                transform: scale(1) translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0) translate(var(--spark-x), var(--spark-y));
+                opacity: 0;
+            }
+        }
+
+        .celebration-text {
+            position: fixed;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 52px;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 
+                0 0 10px #FFD700,
+                0 0 20px #FFD700,
+                0 0 30px #FFD700,
+                3px 3px 6px rgba(0,0,0,0.7);
+            z-index: 10000;
+            pointer-events: none;
+            animation: celebrate 3.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes celebrate {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0) rotateY(-180deg);
+            }
+            12% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.4) rotateY(0deg);
+            }
+            20% {
+                transform: translate(-50%, -50%) scale(1.1) rotateY(0deg);
+            }
+            28% {
+                transform: translate(-50%, -50%) scale(1.3) rotateY(0deg);
+            }
+            80% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3) rotateY(180deg);
+            }
+        }
+
+        /* Hiệu ứng rung màn hình */
+        .screen-shake {
+            animation: shake 0.6s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-3px) translateY(2px); }
+            40% { transform: translateX(3px) translateY(-2px); }
+            60% { transform: translateX(-2px) translateY(3px); }
+            80% { transform: translateX(2px) translateY(-1px); }
+        }
+
+        /* CONTAINER CHÍNH */
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            background: linear-gradient(135deg, #0f2027, #2c5364, #1e3c72);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .progress {
+            background: linear-gradient(90deg, #0f2027, #203a43);
+            border-radius: 15px;
+            height: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #78dbe2, #4facfe, #00f2fe);
+            height: 100%;
+            border-radius: 15px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(120, 219, 226, 0.5);
+        }
+
+        .score {
+            color: #2c5364;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* MODE SWITCH */
+        .mode-switch {
+            margin: 25px 0;
+        }
+
+        .mode-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(44, 83, 100, 0.3);
+            color: #2c5364;
+            padding: 12px 24px;
+            margin: 0 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, #2c5364, #0f2027);
+            color: white;
+            border-color: #78dbe2;
+            box-shadow: 0 5px 15px rgba(15, 32, 39, 0.3);
+        }
+
+        .mode-btn:hover:not(.active) {
+            background: rgba(120, 219, 226, 0.2);
+            border-color: rgba(120, 219, 226, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* FLASHCARD */
+        .flashcard {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,248,255,0.9));
+            border: 2px solid rgba(44, 83, 100, 0.2);
+            border-radius: 20px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px 0;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flashcard:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(15, 32, 39, 0.3);
+            border-color: rgba(120, 219, 226, 0.5);
+        }
+
+        .flashcard.flipped {
+            background: linear-gradient(135deg, rgba(120, 219, 226, 0.1), rgba(79, 172, 254, 0.1));
+            border-color: rgba(30, 60, 114, 0.4);
+        }
+
+        .card-content {
+            padding: 25px;
+            transition: all 0.4s ease;
+        }
+
+        .word {
+            font-size: 42px;
+            font-weight: bold;
+            color: #0f2027;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .meaning {
+            font-size: 24px;
+            color: #2c5364;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .pronunciation {
+            font-size: 20px;
+            color: #1e3c72;
+            font-style: italic;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
+        /* CONTROLS */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0;
+            gap: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2c5364, #0f2027);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(15, 32, 39, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(15, 32, 39, 0.4);
+        }
+
+        .btn:disabled {
+            background: linear-gradient(135deg, #666, #888);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #78dbe2, #4facfe);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #ee5a24, #c44569);
+        }
+
+        /* QUIZ MODE */
+        .quiz-container {
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+        }
+
+        .question {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #0f2027;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(44, 83, 100, 0.2);
+            color: #2c5364;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 16px;
+            position: relative;
+        }
+
+        .option:hover {
+            background: rgba(120, 219, 226, 0.1);
+            border-color: rgba(120, 219, 226, 0.5);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(15, 32, 39, 0.2);
+        }
+
+        .option.correct {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(39, 174, 96, 0.2));
+            border-color: #27ae60;
+            color: #0f2027;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+            animation: correctPulse 0.6s ease-out;
+        }
+
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .option.wrong {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(192, 57, 43, 0.2));
+            border-color: #e74c3c;
+            color: #0f2027;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+            animation: wrongShake 0.6s ease-out;
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 16px;
+            animation: resultSlideIn 0.5s ease-out;
+        }
+
+        .result.correct {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(39, 174, 96, 0.1));
+            color: #0f2027;
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .result.wrong {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(192, 57, 43, 0.1));
+            color: #0f2027;
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+
+        @keyframes resultSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* STATS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(44, 83, 100, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(15, 32, 39, 0.2);
+            border-color: rgba(120, 219, 226, 0.5);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #2c5364, #1e3c72);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #2c5364;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .word {
+                font-size: 32px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .mode-btn {
+                margin: 5px;
+                padding: 10px 18px;
+            }
+
+            .celebration-text {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 🎆 FIREWORKS CONTAINER -->
+    <div class="fireworks-container" id="fireworksContainer"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🌍 International English Flashcards</h1>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="score" id="scoreDisplay">Từ 1/15 | Điểm: 0</div>
+        </div>
+
+        <div class="mode-switch">
+            <button class="mode-btn active" onclick="switchMode('flashcard')">📚 Flashcard</button>
+            <button class="mode-btn" onclick="switchMode('quiz')">🧠 Quiz</button>
+        </div>
+
+        <!-- FLASHCARD MODE -->
+        <div id="flashcardMode" class="flashcard-container">
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="card-content" id="cardContent">
+                    <div class="word" id="wordDisplay">Hello</div>
+                    <div class="pronunciation" id="pronunciation">/həˈloʊ/</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn" onclick="previousCard()" id="prevBtn">⬅️ Trước</button>
+                <button class="btn btn-secondary" onclick="flipCard()">🔄 Lật thẻ</button>
+                <button class="btn" onclick="nextCard()" id="nextBtn">Tiếp ➡️</button>
+            </div>
+        </div>
+
+        <!-- QUIZ MODE -->
+        <div id="quizMode" class="quiz-container">
+            <div class="question" id="quizQuestion">Từ "Hello" có nghĩa là gì?</div>
+            <div class="options" id="quizOptions">
+                <div class="option" onclick="selectAnswer(0)">Xin chào</div>
+                <div class="option" onclick="selectAnswer(1)">Tạm biệt</div>
+                <div class="option" onclick="selectAnswer(2)">Cảm ơn</div>
+                <div class="option" onclick="selectAnswer(3)">Xin lỗi</div>
+            </div>
+            <div class="result" id="quizResult" style="display: none;"></div>
+            <div class="controls">
+                <button class="btn" onclick="previousQuiz()" id="prevQuizBtn">⬅️ Trước</button>
+                <button class="btn btn-secondary" onclick="nextQuiz()" id="nextQuizBtn" style="display: none;">Tiếp ➡️</button>
+                <button class="btn btn-danger" onclick="resetQuiz()">🔄 Làm lại</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalCards">15</div>
+                <div class="stat-label">Tổng từ</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="correctAnswers">0</div>
+                <div class="stat-label">Trả lời đúng</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="accuracy">0%</div>
+                <div class="stat-label">Độ chính xác</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 📚 FLASHCARD DATA
+        const flashcards = [
+            { word: "Hello", meaning: "Xin chào", pronunciation: "/həˈloʊ/" },
+            { word: "Goodbye", meaning: "Tạm biệt", pronunciation: "/ɡʊdˈbaɪ/" },
+            { word: "Thank you", meaning: "Cảm ơn", pronunciation: "/θæŋk juː/" },
+            { word: "Please", meaning: "Xin hãy, làm ơn", pronunciation: "/pliːz/" },
+            { word: "Sorry", meaning: "Xin lỗi", pronunciation: "/ˈsɑːri/" },
+            { word: "Yes", meaning: "Có, đúng", pronunciation: "/jes/" },
+            { word: "No", meaning: "Không", pronunciation: "/noʊ/" },
+            { word: "Water", meaning: "Nước", pronunciation: "/ˈwɔːtər/" },
+            { word: "Food", meaning: "Thức ăn", pronunciation: "/fuːd/" },
+            { word: "House", meaning: "Ngôi nhà", pronunciation: "/haʊs/" },
+            { word: "School", meaning: "Trường học", pronunciation: "/skuːl/" },
+            { word: "Book", meaning: "Cuốn sách", pronunciation: "/bʊk/" },
+            { word: "Friend", meaning: "Bạn bè", pronunciation: "/frend/" },
+            { word: "Family", meaning: "Gia đình", pronunciation: "/ˈfæməli/" },
+            { word: "Love", meaning: "Yêu thương", pronunciation: "/lʌv/" }
+        ];
+
+        // 🎮 GAME STATE
+        let currentCardIndex = 0;
+        let isFlipped = false;
+        let currentMode = 'flashcard';
+        let score = 0;
+        let correctCount = 0;
+        let totalAnswered = 0;
+        let quizAnswered = false;
+
+        // 🎆 FIREWORKS SYSTEM - PHÁO HOA THẬT
+        function createFireworks() {
+            const container = document.getElementById('fireworksContainer');
+            
+            // Tạo 7 quả pháo hoa từ các vị trí khác nhau
+            for (let i = 0; i < 7; i++) {
+                setTimeout(() => {
+                    launchFirework(container);
+                }, i * 250);
+            }
+            
+            // Hiển thị text chúc mừng
+            showCelebrationText();
+            
+            // Rung màn hình nhẹ
+            document.body.classList.add('screen-shake');
+            setTimeout(() => {
+                document.body.classList.remove('screen-shake');
+            }, 600);
+        }
+
+        function launchFirework(container) {
+            // Vị trí bắn ngẫu nhiên từ dưới lên
+            const startX = Math.random() * window.innerWidth;
+            const targetX = Math.random() * window.innerWidth;
+            const targetY = Math.random() * (window.innerHeight * 0.5) + window.innerHeight * 0.1;
+            
+            // Tạo quả pháo hoa bay lên
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = startX + 'px';
+            firework.style.bottom = '0px';
+            firework.style.setProperty('--target-y', -targetY + 'px');
+            
+            // Màu ngẫu nhiên cho quả pháo hoa
+            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#FFD700', '#FF8C42', '#A8E6CF', '#FFB6C1'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            firework.style.background = color;
+            firework.style.boxShadow = `0 0 8px ${color}`;
+            
+            container.appendChild(firework);
+            
+            // Sau khi pháo hoa bay lên, tạo vụ nổ
+            setTimeout(() => {
+                createExplosion(container, targetX, targetY, color);
+                if (firework.parentNode) {
+                    firework.parentNode.removeChild(firework);
+                }
+            }, 1200);
+        }
+
+        function createExplosion(container, x, y, color) {
+            // Tạo 30 tia lửa nổ ra xung quanh
+            for (let i = 0; i < 30; i++) {
+                const burst = document.createElement('div');
+                burst.className = 'firework-burst';
+                burst.style.left = x + 'px';
+                burst.style.top = y + 'px';
+                burst.style.background = color;
+                
+                // Tính toán hướng nổ (360 độ)
+                const angle = (i * 360 / 30) + Math.random() * 12;
+                const distance = 60 + Math.random() * 140;
+                const dx = Math.cos(angle * Math.PI / 180) * distance;
+                const dy = Math.sin(angle * Math.PI / 180) * distance;
+                
+                burst.style.setProperty('--dx', dx + 'px');
+                burst.style.setProperty('--dy', dy + 'px');
+                
+                // Thêm hiệu ứng glow
+                burst.style.boxShadow = `0 0 8px ${color}, 0 0 16px ${color}`;
+                
+                container.appendChild(burst);
+                
+                // Tạo tia lửa nhỏ xung quanh mỗi burst
+                if (i % 4 === 0) {
+                    createSparks(container, x + dx/3, y + dy/3, color);
+                }
+                
+                // Xóa burst sau animation
+                setTimeout(() => {
+                    if (burst.parentNode) {
+                        burst.parentNode.removeChild(burst);
+                    }
+                }, 1800);
+            }
+        }
+
+        function createSparks(container, x, y, color) {
+            // Tạo 10 tia lửa nhỏ
+            for (let i = 0; i < 10; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'spark';
+                spark.style.left = x + 'px';
+                spark.style.top = y + 'px';
+                spark.style.background = color;
+                spark.style.boxShadow = `0 0 4px ${color}`;
+                
+                const sparkAngle = i * 36;
+                const sparkDistance = 15 + Math.random() * 35;
+                const sparkDx = Math.cos(sparkAngle * Math.PI / 180) * sparkDistance;
+                const sparkDy = Math.sin(sparkAngle * Math.PI / 180) * sparkDistance;
+                
+                spark.style.setProperty('--spark-x', sparkDx + 'px');
+                spark.style.setProperty('--spark-y', sparkDy + 'px');
+                
+                container.appendChild(spark);
+                
+                setTimeout(() => {
+                    if (spark.parentNode) {
+                        spark.parentNode.removeChild(spark);
+                    }
+                }, 1000);
+            }
+        }
+
+        function showCelebrationText() {
+            const texts = [
+                '🎉 TUYỆT VỜI!', 
+                '🌟 XUẤT SẮC!', 
+                '🎊 CHÍNH XÁC!', 
+                '⭐ GIỎI LẮM!', 
+                '🏆 HOÀN HẢO!',
+                '🎯 ĐÚNG RỒI!',
+                '💫 AMAZING!',
+                '🔥 FANTASTIC!',
+                '✨ BRILLIANT!',
+                '🎪 WONDERFUL!'
+            ];
+            
+            const celebText = document.createElement('div');
+            celebText.className = 'celebration-text';
+            celebText.textContent = texts[Math.floor(Math.random() * texts.length)];
+                        document.body.appendChild(celebText);
+            
+            // Xóa text sau 3.5 giây
+            setTimeout(() => {
+                if (celebText.parentNode) {
+                    celebText.parentNode.removeChild(celebText);
+                }
+            }, 3500);
+        }
+
+        // 🎯 PROGRESS TRACKING
+        function updateProgress() {
+            const progress = ((currentCardIndex + 1) / flashcards.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('scoreDisplay').textContent = 
+                `Từ ${currentCardIndex + 1}/${flashcards.length} | Điểm: ${score}`;
+            
+            // Cập nhật stats
+            document.getElementById('correctAnswers').textContent = correctCount;
+            const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        // 🃏 FLASHCARD FUNCTIONS
+        function displayCard() {
+            const card = flashcards[currentCardIndex];
+            document.getElementById('wordDisplay').textContent = card.word;
+            document.getElementById('pronunciation').textContent = card.pronunciation;
+            
+            const cardContent = document.getElementById('cardContent');
+            cardContent.innerHTML = `
+                <div class="word">${card.word}</div>
+                <div class="pronunciation">${card.pronunciation}</div>
+            `;
+            
+            isFlipped = false;
+            document.getElementById('flashcard').classList.remove('flipped');
+            updateProgress();
+        }
+
+        function flipCard() {
+            const card = flashcards[currentCardIndex];
+            const cardContent = document.getElementById('cardContent');
+            const flashcard = document.getElementById('flashcard');
+            
+            if (!isFlipped) {
+                cardContent.innerHTML = `
+                    <div class="meaning">${card.meaning}</div>
+                    <div class="pronunciation">${card.pronunciation}</div>
+                `;
+                flashcard.classList.add('flipped');
+                isFlipped = true;
+            } else {
+                cardContent.innerHTML = `
+                    <div class="word">${card.word}</div>
+                    <div class="pronunciation">${card.pronunciation}</div>
+                `;
+                flashcard.classList.remove('flipped');
+                isFlipped = false;
+            }
+        }
+
+        function nextCard() {
+            if (currentCardIndex < flashcards.length - 1) {
+                currentCardIndex++;
+                displayCard();
+            }
+            updateButtons();
+        }
+
+        function previousCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                displayCard();
+            }
+            updateButtons();
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentCardIndex === 0;
+            document.getElementById('nextBtn').disabled = currentCardIndex === flashcards.length - 1;
+        }
+
+        // 🧠 QUIZ FUNCTIONS
+        function generateQuizOptions(correctAnswer) {
+            const options = [correctAnswer];
+            const otherCards = flashcards.filter(card => card.meaning !== correctAnswer);
+            
+            while (options.length < 4 && otherCards.length > 0) {
+                const randomIndex = Math.floor(Math.random() * otherCards.length);
+                const randomMeaning = otherCards[randomIndex].meaning;
+                if (!options.includes(randomMeaning)) {
+                    options.push(randomMeaning);
+                }
+                otherCards.splice(randomIndex, 1);
+            }
+            
+            // Shuffle options
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            
+            return options;
+        }
+
+        function displayQuiz() {
+            const card = flashcards[currentCardIndex];
+            const options = generateQuizOptions(card.meaning);
+            
+            document.getElementById('quizQuestion').textContent = `Từ "${card.word}" có nghĩa là gì?`;
+            
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = options.map((option, index) => 
+                `<div class="option" onclick="selectAnswer(${index})">${option}</div>`
+            ).join('');
+            
+            document.getElementById('quizResult').style.display = 'none';
+            document.getElementById('nextQuizBtn').style.display = 'none';
+            quizAnswered = false;
+            
+            // Store correct answer index
+            window.correctAnswerIndex = options.indexOf(card.meaning);
+            
+            updateProgress();
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (quizAnswered) return;
+            
+            const options = document.querySelectorAll('.option');
+            const resultDiv = document.getElementById('quizResult');
+            const card = flashcards[currentCardIndex];
+            
+            quizAnswered = true;
+            totalAnswered++;
+            
+            if (selectedIndex === window.correctAnswerIndex) {
+                // ✅ CORRECT ANSWER - PHÁO HOA!
+                options[selectedIndex].classList.add('correct');
+                resultDiv.innerHTML = `
+                    <div class="result correct">
+                        🎉 Chính xác! "${card.word}" có nghĩa là "${card.meaning}"
+                        <br><small>Phát âm: ${card.pronunciation}</small>
+                    </div>
+                `;
+                score += 10;
+                correctCount++;
+                
+                // 🎆 BẮN PHÁO HOA SAU 400MS!
+                setTimeout(() => {
+                    createFireworks();
+                }, 400);
+                
+            } else {
+                // ❌ WRONG ANSWER
+                options[selectedIndex].classList.add('wrong');
+                options[window.correctAnswerIndex].classList.add('correct');
+                resultDiv.innerHTML = `
+                    <div class="result wrong">
+                        ❌ Sai rồi! Đáp án đúng là "${card.meaning}"
+                        <br><small>Phát âm: ${card.pronunciation}</small>
+                    </div>
+                `;
+            }
+            
+            resultDiv.style.display = 'block';
+            document.getElementById('nextQuizBtn').style.display = 'inline-flex';
+            updateProgress();
+        }
+
+        function nextQuiz() {
+            if (currentCardIndex < flashcards.length - 1) {
+                currentCardIndex++;
+                displayQuiz();
+            }
+            updateQuizButtons();
+        }
+
+        function previousQuiz() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                displayQuiz();
+            }
+            updateQuizButtons();
+        }
+
+        function updateQuizButtons() {
+            document.getElementById('prevQuizBtn').disabled = currentCardIndex === 0;
+        }
+
+        function resetQuiz() {
+            currentCardIndex = 0;
+            score = 0;
+            correctCount = 0;
+            totalAnswered = 0;
+            displayQuiz();
+            updateQuizButtons();
+        }
+
+        // 🔄 MODE SWITCHING
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Update mode buttons
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide containers
+            if (mode === 'flashcard') {
+                document.getElementById('flashcardMode').style.display = 'block';
+                document.getElementById('quizMode').classList.remove('active');
+                displayCard();
+                updateButtons();
+            } else {
+                document.getElementById('flashcardMode').style.display = 'none';
+                document.getElementById('quizMode').classList.add('active');
+                displayQuiz();
+                updateQuizButtons();
+            }
+        }
+
+        // 🚀 INITIALIZATION
+        function init() {
+            displayCard();
+            updateButtons();
+            updateProgress();
+            
+            console.log('🌍 International English Flashcards initialized!');
+            console.log('🎆 Real Fireworks system ready!');
+        }
+
+        // 🎯 EVENT LISTENERS
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (currentMode === 'flashcard') {
+                if (e.key === 'ArrowLeft') previousCard();
+                if (e.key === 'ArrowRight') nextCard();
+                if (e.key === ' ') {
+                    e.preventDefault();
+                    flipCard();
+                }
+            } else if (currentMode === 'quiz') {
+                if (e.key === 'ArrowLeft') previousQuiz();
+                if (e.key === 'ArrowRight' && quizAnswered) nextQuiz();
+                if (e.key >= '1' && e.key <= '4') {
+                    selectAnswer(parseInt(e.key) - 1);
+                }
+            }
+        });
+
+        // Prevent context menu
+        document.addEventListener('contextmenu', e => e.preventDefault());
+    </script>
+</body>
+</html>
+
