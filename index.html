@@ -707,21 +707,21 @@
 
         // 🌍 DEFAULT VOCABULARY - 15 TỪ VỰNG QUỐC TẾ
         const defaultVocabulary = [
-            { word: "sail", meaning: "buồm" },
-            { word: "mow", meaning: "cắt cỏ" },
-            { word: "overlook", meaning: "nhìn ra" },
-            { word: "Language", meaning: "Ngôn ngữ, tiếng nói" },
-            { word: "assemble", meaning: "lắp ráp" },
-            { word: "aisle", meaning: "lối đi (giữa các hàng ghế" },
-            { word: "shade", meaning: "bóng râm,rèm" },
-            { word: "surround", meaning: "bao vây"},
-            { word: "kneel", meaning: "quỳ gối" },
-            { word: "perform", meaning: "người trình diễn" },
-            { word: "Sustainable", meaning: "Bền vững, lâu dài" },
-            { word: "Development", meaning: "Phát triển, tiến bộ" },
-            { word: "revise", meaning: "sửa đổi" },
-            { word: "feature", meaning: "đặc điểm" },
-            { word: "justify", meaning: "biện minh" }
+            { word: "sail", meaning: "buồm", ipa: "/seɪl/" },
+            { word: "mow", meaning: "cắt cỏ", ipa: "/moʊ/" },
+            { word: "overlook", meaning: "nhìn ra", ipa: "/ˌoʊvərˈlʊk/" },
+            { word: "Language", meaning: "Ngôn ngữ, tiếng nói", ipa: "/ˈlæŋɡwɪdʒ/" },
+            { word: "assemble", meaning: "lắp ráp", ipa: "/əˈsɛmbəl/" },
+            { word: "aisle", meaning: "lối đi (giữa các hàng ghế", ipa: "/aɪl/" },
+            { word: "shade", meaning: "bóng râm,rèm", ipa: "/ʃeɪd/" },
+            { word: "surround", meaning: "bao vây", ipa: "/səˈraʊnd/" },
+            { word: "kneel", meaning: "quỳ gối", ipa: "/niːl/" },
+            { word: "perform", meaning: "người trình diễn", ipa: "/pərˈfɔːrm/" },
+            { word: "Sustainable", meaning: "Bền vững, lâu dài", ipa: "/səˈsteɪnəbəl/" },
+            { word: "Development", meaning: "Phát triển, tiến bộ", ipa: "/dɪˈvɛləpmənt/" },
+            { word: "revise", meaning: "sửa đổi", ipa: "/rɪˈvaɪz/" },
+            { word: "feature", meaning: "đặc điểm", ipa: "/ˈfiːtʃər/" },
+            { word: "justify", meaning: "biện minh", ipa: "/ˈdʒʌstɪfaɪ/" }
         ];
 
         // 🚀 INITIALIZE APP
@@ -752,7 +752,7 @@
         });
 
         // 📚 ADD WORD FUNCTION
-        function addWord() {
+        async function addWord() {
             const wordInput = document.getElementById('wordInput');
             const meaningInput = document.getElementById('meaningInput');
             
@@ -769,9 +769,24 @@
                 alert('⚠️ Từ này đã tồn tại!');
                 return;
             }
+
+            // Fetch IPA
+            let ipa = '';
+            try {
+                const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+                const data = await response.json();
+                if (data.length > 0 && data[0].phonetics.length > 0) {
+                    const phonetic = data[0].phonetics.find(p => p.text);
+                    if (phonetic) {
+                        ipa = phonetic.text;
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching IPA:', error);
+            }
             
             // Add new word
-            vocabulary.push({ word, meaning });
+            vocabulary.push({ word, meaning, ipa });
             
             // Clear inputs
             wordInput.value = '';
@@ -1337,9 +1352,22 @@
         function speakWord(word, event) {
             event.stopPropagation(); // Ngăn sự kiện click lan ra các phần tử cha (như lật thẻ)
             if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Hủy bỏ lời nói hiện tại
                 const utterance = new SpeechSynthesisUtterance(word);
                 utterance.lang = 'en-US'; // Đặt ngôn ngữ là tiếng Anh (Mỹ)
-                utterance.rate = 0.9; // Tốc độ đọc
+                utterance.rate = 1.0; // Tốc độ đọc chuẩn
+
+                // Cố gắng chọn một giọng đọc chất lượng cao
+                const voices = window.speechSynthesis.getVoices();
+                const googleVoice = voices.find(voice => voice.name === 'Google US English');
+                const microsoftVoice = voices.find(voice => voice.name === 'Microsoft David - English (United States)');
+                
+                if (googleVoice) {
+                    utterance.voice = googleVoice;
+                } else if (microsoftVoice) {
+                    utterance.voice = microsoftVoice;
+                }
+
                 window.speechSynthesis.speak(utterance);
             } else {
                 alert('Rất tiếc, trình duyệt của bạn không hỗ trợ chức năng đọc văn bản.');
