@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌍 Flashcard Học Từ Vựng</title>
+    <title>🌍 Flashcard Học Từ Vựng Quốc Tế</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -257,6 +258,12 @@
             margin-bottom: 15px;
             word-break: break-word;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .ipa {
+            font-size: 1.2em;
+            color: #a0c4cc;
+            margin-bottom: 15px;
         }
 
         .card-info {
@@ -620,6 +627,7 @@
                 <input type="text" id="wordInput" placeholder="Nhập từ tiếng Anh..." maxlength="50">
                 <input type="text" id="meaningInput" placeholder="Nhập nghĩa tiếng Việt..." maxlength="100">
                 <button onclick="addWord()">➕ Thêm</button>
+                <button onclick="exportToExcel()">📄 Xuất ra Excel</button>
             </div>
         </div>
 
@@ -699,43 +707,37 @@
 
         // 🌍 DEFAULT VOCABULARY - 15 TỪ VỰNG QUỐC TẾ
         const defaultVocabulary = [
-            { word: "Global", meaning: "Toàn cầu, trên toàn thế giới" },
-            { word: "International", meaning: "Quốc tế, giữa các quốc gia" },
-            { word: "Culture", meaning: "Văn hóa, nền văn minh" },
+            { word: "sail", meaning: "buồm" },
+            { word: "mow", meaning: "cắt cỏ" },
+            { word: "overlook", meaning: "nhìn ra" },
             { word: "Language", meaning: "Ngôn ngữ, tiếng nói" },
-            { word: "Communication", meaning: "Giao tiếp, truyền thông" },
-            { word: "Technology", meaning: "Công nghệ, kỹ thuật" },
-            { word: "Innovation", meaning: "Sự đổi mới, cải tiến" },
-            { word: "Collaboration", meaning: "Hợp tác, cộng tác" },
-            { word: "Diversity", meaning: "Sự đa dạng, khác biệt" },
-            { word: "Environment", meaning: "Môi trường, hoàn cảnh" },
+            { word: "assemble", meaning: "lắp ráp" },
+            { word: "aisle", meaning: "lối đi (giữa các hàng ghế" },
+            { word: "shade", meaning: "bóng râm,rèm" },
+            { word: "surround", meaning: "bao vây"},
+            { word: "kneel", meaning: "quỳ gối" },
+            { word: "perform", meaning: "người trình diễn" },
             { word: "Sustainable", meaning: "Bền vững, lâu dài" },
             { word: "Development", meaning: "Phát triển, tiến bộ" },
-            { word: "Education", meaning: "Giáo dục, học tập" },
-            { word: "Knowledge", meaning: "Kiến thức, hiểu biết" },
-            { word: "Future", meaning: "Tương lai, mai sau" }
+            { word: "revise", meaning: "sửa đổi" },
+            { word: "feature", meaning: "đặc điểm" },
+            { word: "justify", meaning: "biện minh" }
         ];
 
         // 🚀 INITIALIZE APP
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 App initialized with International Dark Theme');
-            loadFromLocalStorage();
-            // loadNotesFromLocalStorage();
             
             // If no vocabulary exists, load default
             if (vocabulary.length === 0) {
                 vocabulary = [...defaultVocabulary];
                 console.log('📚 Loaded 15 default international vocabulary words');
-                saveToLocalStorage();
             }
             
             updateDisplay();
             updateWordList();
             updateProgress();
             
-            // Event listener for notes
-            // const notesTextarea = document.getElementById('notesTextarea');
-            // notesTextarea.addEventListener('input', saveNotesToLocalStorage);
             document.getElementById('wordInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     document.getElementById('meaningInput').focus();
@@ -779,7 +781,6 @@
             // Update display
             updateWordList();
             updateProgress();
-            saveToLocalStorage();
             
             // If this is first word, display it
             if (vocabulary.length === 1) {
@@ -815,6 +816,7 @@
                 flashcardElement.innerHTML = `
                     <div class="card-content">
                         <div class="word">${card.word} <span class="speak-btn" onclick="speakWord('${card.word}', event)">🔊</span></div>
+                        <div class="ipa">${card.ipa || ''}</div>
                         <div class="card-info">
                             <span class="card-number">${currentIndex + 1}/${vocabulary.length}</span>
                             <span class="card-type">🌍 Từ vựng</span>
@@ -1096,6 +1098,7 @@
                     <div class="word-item">
                         <div class="word-info">
                             <div class="word-text">${item.word} <span class="speak-btn" onclick="speakWord('${item.word}', event)">🔊</span></div>
+                            <div class="ipa">${item.ipa || ''}</div>
                             <div class="word-meaning">${item.meaning}</div>
                         </div>
                         <button class="delete-btn" onclick="deleteWord(${index})">🗑️ Xóa</button>
@@ -1126,53 +1129,13 @@
                 // Update displays
                 updateWordList();
                 updateDisplay();
-                saveToLocalStorage();
                 
                 console.log(`🗑️ Deleted word at index ${index}. Remaining: ${vocabulary.length}`);
             }
         }
 
-        // 💾 LOCAL STORAGE FUNCTIONS
         function showNote() {
-            alert("Chủ đề hôm nay: Từ vựng Quốc tế và Công nghệ.");
-        }
-        function saveToLocalStorage() {
-            try {
-                localStorage.setItem('flashcard_vocabulary_international', JSON.stringify(vocabulary));
-                localStorage.setItem('flashcard_currentIndex_international', currentIndex.toString());
-                localStorage.setItem('flashcard_quizIndex_international', quizCurrentIndex.toString());
-                console.log('💾 Data saved to localStorage');
-            } catch (error) {
-                console.error('❌ Error saving to localStorage:', error);
-            }
-        }
-
-        function loadFromLocalStorage() {
-            try {
-                const savedVocabulary = localStorage.getItem('flashcard_vocabulary_international');
-                const savedCurrentIndex = localStorage.getItem('flashcard_currentIndex_international');
-                const savedQuizIndex = localStorage.getItem('flashcard_quizIndex_international');
-                
-                if (savedVocabulary) {
-                    vocabulary = JSON.parse(savedVocabulary);
-                    console.log(`📚 Loaded ${vocabulary.length} words from localStorage`);
-                }
-                
-                if (savedCurrentIndex) {
-                    currentIndex = Math.min(parseInt(savedCurrentIndex), Math.max(0, vocabulary.length - 1));
-                }
-                
-                if (savedQuizIndex) {
-                    quizCurrentIndex = Math.min(parseInt(savedQuizIndex), Math.max(0, vocabulary.length - 1));
-                }
-                
-                console.log('📖 Data loaded from localStorage');
-            } catch (error) {
-                console.error('❌ Error loading from localStorage:', error);
-                vocabulary = [];
-                currentIndex = 0;
-                quizCurrentIndex = 0;
-            }
+            alert("Chủ đề hôm nay: Từ vựng phần nghe.");
         }
 
         // 🎆 FIREWORKS ANIMATION
@@ -1370,14 +1333,6 @@
             touchStartY = 0;
         });
 
-        // 🎯 AUTO-SAVE EVERY 30 SECONDS
-        setInterval(() => {
-            if (vocabulary.length > 0) {
-                saveToLocalStorage();
-                console.log('💾 Auto-saved data');
-            }
-        }, 30000);
-
         // 🔧 UTILITY FUNCTIONS
         function speakWord(word, event) {
             event.stopPropagation(); // Ngăn sự kiện click lan ra các phần tử cha (như lật thẻ)
@@ -1426,7 +1381,6 @@
                         
                         updateWordList();
                         updateDisplay();
-                        saveToLocalStorage();
                         
                         alert(`✅ Đã import thành công ${vocabulary.length} từ vựng!`);
                     } else {
@@ -1437,6 +1391,13 @@
                 }
             };
             reader.readAsText(file);
+        }
+
+        function exportToExcel() {
+            const worksheet = XLSX.utils.json_to_sheet(vocabulary);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Vocabulary");
+            XLSX.writeFile(workbook, "vocabulary.xlsx");
         }
 
         // 📊 STATISTICS
